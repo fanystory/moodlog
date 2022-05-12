@@ -13,9 +13,7 @@ import datetime as dt
 import postpaging
 
 ca = certifi.where()
-#client = MongoClient('mongodb+srv://test:sparta@cluster0.2xioe.mongodb.net/Cluster0?retryWrites=true&w=majority', tlsCAFile=ca)
-client = MongoClient('mongodb+srv://test:sparta@cluster0.ixw8e.mongodb.net/Cluster0?retryWrites=true&w=majority', tlsCAFile=ca)
-#db = client.sparta
+client = MongoClient('mongodb url', tlsCAFile=ca)
 db = client.moodlog
 
 app = Flask(__name__)
