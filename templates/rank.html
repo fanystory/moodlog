@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+    <head>
+
+        <!-- Webpage Title -->
+        <title>RANK | MOOD LOG</title>
+
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bulma CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
+        <!-- Google Font CSS -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Gugi&family=Londrina+Shadow&display=swap" rel="stylesheet">
+
+        <!-- JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+        <script src="https://kit.fontawesome.com/3310fda83a.js" crossorigin="anonymous"></script>
+
+        <!-- moodlog JS CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='./css/common.css') }}">
+        <script src="{{ url_for('static',filename='./js/common.js') }}"></script>
+
+        <script>
+            $(document).ready(function () {
+
+            });
+        </script>
+
+    </head>
+    <body>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">
+                    <span id="title">MOODLOG</span>
+                </a>
+
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                   data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="/">
+                        🎧 모아듣기
+                    </a>
+                    <a class="navbar-item" href="/rank">
+                        🎖 랭킹
+                    </a>
+                    <a class="navbar-item" href="/user/{{user_id}}">
+                        🙋‍ 내 로그
+                    </a>
+                </div>
+
+                <div class="navbar-end">
+                    <div class="navbar-item">
+
+                        <img src="./static/profile_pics/{{user_pro}}" class="is-rounded" style="margin-right:10px">
+                        <span style="margin-right:10px;">{{user_nick}}님 안녕하세요.</span>
+                        <div class="buttons">
+                            <a class="button is-danger" href="javascript:logout()">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <section class="hero is-primary" id="section_hero">
+            <div class="hero-body">
+                <p class="title">
+                    🥇무드랭킹
+                </p>
+                <p>어떤 무드가 가장 인기있을까요</p>
+            </div>
+        </section>
+        <section class="section" id="section_mainbody">
+            {% for doc in give_moods %}
+            <div class="card">
+              <div class="card-content">
+                <div class="content">
+                    <span class="tag is-primary is-light">{{ loop.index }}위</span>
+                    <h3>{{ doc.mood_name }}</h3>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+        </section>
+    </body>
+</html>

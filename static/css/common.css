@@ -1,0 +1,37 @@
+* {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+#title {
+    font-weight: 800;
+    font-size: 2rem;
+    font-family: 'Gugi', cursive;
+    font-family: 'Londrina Shadow', cursive;
+
+}
+
+
+#section_hero {
+    text-align: center;
+}
+
+#section_filter {
+    width: 90%;
+    margin: 0 auto;
+}
+
+#section_mainbody {
+    width: 80%;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+#section_loading {
+    text-align: center;
+}
+
+#div_rightButton {
+    position: fixed;
+    bottom: 20px;
+    right: 10px;
+}

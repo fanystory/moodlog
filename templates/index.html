@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+    <head>
+
+        <!-- Webpage Title -->
+        <title>Home | MOOD LOG</title>
+
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bulma CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
+        <!-- Google Font CSS -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Gugi&family=Londrina+Shadow&display=swap" rel="stylesheet">
+
+        <!-- JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+        <script src="https://kit.fontawesome.com/3310fda83a.js" crossorigin="anonymous"></script>
+
+        <!-- moodlog JS CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='./css/common.css') }}">
+        <script src="{{ url_for('static',filename='./js/common.js') }}"></script>
+
+        <script>
+            $(document).ready(function () {
+                loadMoodListForIndex();
+
+                $('#section_mainbody').append(temp_html);
+            });
+        </script>
+
+    </head>
+    <body>
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <a class="navbar-item" href="/">
+                    <span id="title">MOODLOG</span>
+                </a>
+
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                   data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="/">
+                        🎧 모아듣기
+                    </a>
+                    <a class="navbar-item" href="/rank">
+                        🎖 랭킹
+                    </a>
+                    <a class="navbar-item" href="/user/{{user_id}}">
+                        🙋‍ 내 로그
+                    </a>
+                </div>
+
+                <div class="navbar-end">
+                    <div class="navbar-item">
+
+                        <img src="./static/profile_pics/{{user_pro}}" class="is-rounded" style="margin-right:10px">
+                        <span style="margin-right:10px;">{{user_nick}}님 안녕하세요.</span>
+                        <div class="buttons">
+                            <a class="button is-danger" href="javascript:logout()">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <section class="hero is-primary" id="section_hero">
+            <div class="hero-body">
+                <p class="title">
+                    🎧 모아듣기
+                </p>
+
+                <div class="select is-rounded is-medium " id="div_selectMood">
+                    <select id="selectMoodList" onchange="changeMode()">
+                        <option value=0>🎧 전체무드</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+        <!-- 스펙아웃 -->
+        <!--section class="section" id="section_filter">
+            <div class="columns">
+                <div class="column">
+                    <div class="select is-rounded is-medium " id="div_selectMood">
+                        <select id="selectMoodList">
+                            <option value="0">🎧 전체무드</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="column" >
+                    <div class="tabs is-toggle is-toggle-rounded" id="div_selectSort" style="display:inline-block; float: right;">
+                        <ul>
+                            <li class="is-active">
+                                <a>
+                                    <span class="icon is-small"><i class="fas fa-sort"></i></span>
+                                    <span>최신순</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a>
+                                    <span class="icon is-small"><i class="fas fa-heart"></i></span>
+                                    <span>좋아요순</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section-->
+        <section class="section" id="section_mainbody">
+            <div style="width:100%; margin-bottom: 30px;" id="div_playMusic">
+
+            </div>
+            {% for doc in docPosts %}
+            <article class="media">
+                <figure class="media-left">
+                    <p class="image is-64x64">
+                        <a href="./user/{{doc.post_user_id}}"><img src="./static/profile_pics/{{doc.post_user_pro}}" class="is-rounded"></a>
+                    </p>
+                </figure>
+                <div class="media-content">
+                    <div class="content" >
+                        <p>
+                            <strong>{{doc.post_user_nick}}</strong> <small>{{doc.post_user_id}}</small> <small>1시간전</small>
+
+                        </p>
+                        <span class="tag is-info is-light">{{ doc.post_mood }}</span>
+
+                        <!-- 큰일났다 사운드 클라우드가 jinja를 막았다... js로 우회해야함 -->
+                        <div id="{{doc.post_link}}" class="iHateSoundCloud">
+
+                        </div>
+
+                        <div class="box" style="width:100%; margin-top: 5px;">
+
+
+                            <div class="columns is-mobile">
+                                <div class="column is-one-quarter">
+                                    <img src="{{doc.post_image}}">
+                                </div>
+                                <div class="column">
+                                    <h4>{{doc.post_title}}</h4>
+                                    <p>
+                                        {% for line in doc.post_con.split('\n') %}
+                                        {{ line }}
+                                        <br />
+                                        {% endfor %}
+                                    </p>
+
+                                    <div style="width:100%; text-align: right">
+                                        <div>
+                                            <button class="button is-danger" onclick="playMusic('{{ doc.post_link }}')">
+                                                <span class="icon">
+                                                   <i class="fa-solid fa-play"></i>
+                                                </span>
+                                                <span>재생</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <nav class="level is-mobile" style="margin-top:20px; margin-bottom:20px;">
+                        <div class="level-left">
+                        </div>
+                    </nav>
+                </div>
+                <div class="media-right">
+                </div>
+            </article>
+            {% endfor %}
+        </section>
+
+        <button class="button is-medium is-fullwidth is-link" onclick="loadMorePost()">
+            <span><i class="fa-solid fa-spinner"></i></span><span style="margin-left:5px;">포스트 더 불러오기</span>
+        </button>
+
+        <div id="div_rightButton">
+            <button class="button is-success is-rounded is-large" data-target="div_addPost" onclick="$('#div_addPost').addClass('is-active')">
+                <span><i class="fa-solid fa-plus"></i></span><span style="margin-left:5px;">작성</span>
+            </button>
+            <button class="button is-dark is-rounded is-large" onclick="onTop()">
+                <span><i class="fa-solid fa-arrow-up"></i></span>
+            </button>
+        </div>
+
+        <div id="div_addPost" class="modal">
+            <div class="modal-background"></div>
+
+            <div class="modal-content">
+                <div class="box">
+                    <div style="margin-bottom:40px;"><strong>🎧 포스트 등록</strong></div>
+                    <div class="field">
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" type="text" placeholder="{{user_id}}" value="{{user_id}}" id="post_userId" disabled>
+                            <span class="icon is-small is-left">
+                                <i class="fa-solid fa-user"></i>
+                            </span>
+                            <span class="icon is-small is-right">
+                                <i class="fas fa-check"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" type="text" placeholder="Sound Cloud URL (음악 주소를 넣어주세요.)" id="post_soundCloudUrl">
+                            <span class="icon is-small is-left">
+                                <i class="fa-solid fa-link"></i>
+                            </span>
+                            <span class="icon is-small is-right">
+                                <i class="fas fa-check"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div style="margin-bottom:10px;" id="div_previewMusic">
+
+                    </div>
+
+                    <div class="field">
+                        <p class="control has-icons-left has-icons-right">
+                            <input class="input" type="text" placeholder="주소를 입력하면 제목이 자동입력됩니다." id="post_title" disabled>
+                            <span class="icon is-small is-left">
+                                <i class="fa-solid fa-music"></i>
+                            </span>
+                            <span class="icon is-small is-right">
+                                <i class="fas fa-check"></i>
+                            </span>
+                        </p>
+                    </div>
+                    <div><textarea class="textarea" placeholder="메시지를 10자 이상 작성해주세요." id="post_message"></textarea></div>
+                    <div class="select" style="margin-top: 20px;">
+                        <select id="post_selectMood">
+
+                        </select>
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <button class="button is-success" style="width:100%" onclick="uploadPost()">
+                            <span class="icon is-small">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span>저장</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="modal-close is-large" aria-label="close"></button>
+        </div>
+
+    </body>
+</html>
